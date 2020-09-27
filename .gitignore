@@ -1,0 +1,6 @@
+/target/
+.classpath
+.project
+.settings/
+ignite/
+logs/spring.log*
