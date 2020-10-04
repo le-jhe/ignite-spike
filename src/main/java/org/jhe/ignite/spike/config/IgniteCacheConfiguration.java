@@ -1,6 +1,6 @@
 package org.jhe.ignite.spike.config;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.cache.expiry.Duration;
@@ -41,8 +41,8 @@ public class IgniteCacheConfiguration {
 	private String instance;
 	@Value("${ignite.multicast.group:}")
 	private String multicastGroup;
-	@Value("${ignite.addresses:}")
-	private String addresses;
+	@Value("#{'${ignite.addresses:}'.split(',')}")
+	private List<String> addresses;
 
 	@Bean
 	public SpringCacheManager springCacheManager() {
@@ -93,13 +93,13 @@ public class IgniteCacheConfiguration {
 	private TcpDiscoveryVmIpFinder getTcpDiscoveryMulticastIpFinder() {
 		if (StringUtils.isBlank(multicastGroup)) {
 			LOGGER.warn("no multicast group set ! this should happen only in test mode");
-
+			LOGGER.warn("adresses={}", addresses);
 			return new TcpDiscoveryVmIpFinder()
-					.setAddresses(Collections.singletonList(addresses));
+					.setAddresses(addresses);
 		}
 
 		return new TcpDiscoveryMulticastIpFinder()
 				.setMulticastGroup(multicastGroup)
-				.setAddresses(Collections.singletonList(addresses));
+				.setAddresses(addresses);
 	}
 }
