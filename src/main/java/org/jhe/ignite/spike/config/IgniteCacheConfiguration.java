@@ -41,7 +41,7 @@ public class IgniteCacheConfiguration {
 	private String instance;
 	@Value("${ignite.multicast.group:}")
 	private String multicastGroup;
-	@Value("${ignite.addresses}")
+	@Value("${ignite.addresses:}")
 	private String addresses;
 
 	@Bean
