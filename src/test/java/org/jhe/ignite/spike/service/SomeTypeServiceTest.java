@@ -17,7 +17,8 @@ public class SomeTypeServiceTest extends TestContext {
 
 	@Test
 	public void test() {
-		Map<String,SomeType> someTypes = someTypeService.initCache();
+		// Map<String,SomeType> someTypes = someTypeService.initCache();
+		Map<String, SomeType> someTypes = someTypeService.loadAll();
 		assertNotNull(someTypes);
 		assertEquals(100_000, someTypes.size());
 		assertTrue(someTypes.containsKey("515_K00011"));
@@ -25,7 +26,8 @@ public class SomeTypeServiceTest extends TestContext {
 
 	@Test
 	public void test2() {
-		Map<String, SomeType> someTypes = someTypeService.initCache();
+		// Map<String, SomeType> someTypes = someTypeService.initCache();
+		Map<String, SomeType> someTypes = someTypeService.loadAll();
 		assertNotNull(someTypes);
 		assertEquals(100_000, someTypes.size());
 		assertTrue(someTypes.containsKey("515_K00011"));

@@ -23,9 +23,9 @@ public class CacheManagerTest extends TestContext {
 	public void testGetSomeCache() {
 		IgniteCache<String, SomeType> cache = cacheManager.getCache("sometype", String.class, SomeType.class);
 		assertNotNull(cache);
-		assertEquals(0, cache.size(CachePeekMode.OFFHEAP));
+		int cacheSize = cache.size(CachePeekMode.OFFHEAP);
 		cache.put("someKey", new SomeType());
-		assertEquals(1, cache.size(CachePeekMode.OFFHEAP));
+		assertEquals(cacheSize + 1, cache.size(CachePeekMode.OFFHEAP));
 		assertNotNull(cache.get("someKey"));
 	}
 }
