@@ -26,14 +26,19 @@ public class SomeTypeService {
 	public Map<String, SomeType> initCache() {
 		Map<String, SomeType> someTypes = new HashMap<>();
 		cache = cacheManager.getCache(CACHE_REGION_NAME, String.class, SomeType.class);
-		for (int i = 0; i < 100_000; i++) {
-			String key = "515_K" + StringUtils.leftPad(String.valueOf(i), 5, "0");
-			SomeType value = new SomeType(key, key);
-			cache.put(key, value);
-//			someTypes.put(key, value);
-		}
-		for (Entry<String, SomeType> entry : cache) {
-			someTypes.put(entry.getKey(), entry.getValue());
+		if (cache.metrics().isEmpty()) {
+			for (int i = 0; i < 100_000; i++) {
+				String key = "515_K" + StringUtils.leftPad(String.valueOf(i), 5, "0");
+				SomeType value = new SomeType(key, key);
+				cache.putIfAbsentAsync(key, value);
+				someTypes.put(key, value);
+			}
+		} else {
+			LOGGER.warn("cache was already loaded");
+			for (Entry<String, SomeType> entry : cache) {
+				someTypes.put(entry.getKey(), entry.getValue());
+			}
+
 		}
 		LOGGER.warn("filled cache with elements.#={}", someTypes.size());
 		return someTypes;
@@ -47,6 +52,23 @@ public class SomeTypeService {
 		}
 
 		return someTypes;
+	}
+
+	public SomeType load(String id) {
+		SomeType someType = null;
+		cache = cacheManager.getCache(CACHE_REGION_NAME, String.class, SomeType.class);
+		someType = cache.get(id);
+		if (someType == null) {
+			LOGGER.warn("will fake a load... id={}", id);
+			try {
+				Thread.sleep(1_000);
+			} catch (InterruptedException e) {
+				LOGGER.error("unexpected", e);
+			}
+			someType = new SomeType(id, "I was born outside cache...");
+			cache.put(id, someType);
+		}
+		return someType;
 	}
 
 	public SomeType put(SomeType someType) {

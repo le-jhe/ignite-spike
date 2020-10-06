@@ -23,4 +23,14 @@ public class SomeTypeServiceTest extends TestContext {
 		assertTrue(someTypes.containsKey("515_K00011"));
 	}
 
+	@Test
+	public void test2() {
+		Map<String, SomeType> someTypes = someTypeService.initCache();
+		assertNotNull(someTypes);
+		assertEquals(100_000, someTypes.size());
+		assertTrue(someTypes.containsKey("515_K00011"));
+		assertNotNull(someTypeService.load("515_K00011"));
+		assertNotNull(someTypeService.load("515_Z00011"));
+	}
+
 }
