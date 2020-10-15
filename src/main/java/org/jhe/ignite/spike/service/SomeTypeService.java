@@ -12,12 +12,15 @@ import org.jhe.ignite.spike.model.SomeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SomeTypeService {
-	public static final Logger LOGGER = LoggerFactory.getLogger(SomeTypeService.class);
-	public static final String CACHE_REGION_NAME = "sometype";
+	private static final Logger LOGGER = LoggerFactory.getLogger(SomeTypeService.class);
+	private static final String CACHE_REGION_NAME = "sometype";
+	@Value("${sometype.cache.size:100000}")
+	private int cacheSize;
 
 	@Autowired
 	private CacheManager cacheManager;
@@ -27,7 +30,7 @@ public class SomeTypeService {
 		Map<String, SomeType> someTypes = new HashMap<>();
 		cache = cacheManager.getCache(CACHE_REGION_NAME, String.class, SomeType.class);
 		if (cache.metrics().isEmpty()) {
-			for (int i = 0; i < 100_000; i++) {
+			for (int i = 0; i < cacheSize; i++) {
 				String key = "515_K" + StringUtils.leftPad(String.valueOf(i), 5, "0");
 				SomeType value = new SomeType(key, key);
 				someTypes.put(key, value);
