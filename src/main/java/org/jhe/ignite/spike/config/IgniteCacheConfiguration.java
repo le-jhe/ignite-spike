@@ -1,8 +1,10 @@
 package org.jhe.ignite.spike.config;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import javax.cache.expiry.EternalExpiryPolicy;
+import javax.cache.expiry.Duration;
+import javax.cache.expiry.TouchedExpiryPolicy;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ignite.cache.CacheAtomicityMode;
@@ -58,8 +60,8 @@ public class IgniteCacheConfiguration {
 		return new CacheConfiguration<>()
 				.setCacheMode(CacheMode.REPLICATED)
 				.setAtomicityMode(CacheAtomicityMode.ATOMIC)
-				.setExpiryPolicyFactory(EternalExpiryPolicy.factoryOf())
-				// .setExpiryPolicyFactory(TouchedExpiryPolicy.factoryOf(new Duration(TimeUnit.SECONDS, ttl)))
+				// .setExpiryPolicyFactory(EternalExpiryPolicy.factoryOf())
+				.setExpiryPolicyFactory(TouchedExpiryPolicy.factoryOf(new Duration(TimeUnit.SECONDS, ttl)))
 				.setEagerTtl(false) // we don't mind about old entries..
 				// .setBackups(1) // this is for PARTITIONED, and in our case 1 would be nice
 				.setStatisticsEnabled(false); // --> creates in memory h2 db with stats.
