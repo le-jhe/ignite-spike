@@ -61,9 +61,9 @@ public class IgniteCacheConfiguration {
 				.setCacheMode(CacheMode.REPLICATED)
 				.setAtomicityMode(CacheAtomicityMode.ATOMIC)
 				.setExpiryPolicyFactory(TouchedExpiryPolicy.factoryOf(new Duration(TimeUnit.SECONDS, ttl)))
-				//.setEagerTtl(true) //we don't mind about old entries..
-				// .setBackups(1) // this is for PARTITIONED, and in our case 1 would be nice
-				.setStatisticsEnabled(true); // --> creates in memory h2 db with stats.
+				.setEagerTtl(false) // we don't mind about old entries..
+				.setBackups(1) // this is for PARTITIONED, and in our case 1 would be nice
+				.setStatisticsEnabled(false); // --> creates in memory h2 db with stats.
 
 		//.setRebalanceBatchSize(1024 * 1024)
 		//.setRebalanceThrottle(50);
