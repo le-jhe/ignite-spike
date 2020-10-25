@@ -1,10 +1,12 @@
 package org.jhe.ignite.spike.config;
 
 import org.jhe.ignite.spike.service.SomeTypeService;
+import org.jhe.ignite.spike.utils.VersionHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
@@ -39,10 +41,10 @@ public class Config {
 				.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 	}
 
-//	@Bean
-//	public VersionHolder getVersionHolder(ApplicationContext context) {
-//		return new VersionHolder(context);
-//	}
+	@Bean
+	public VersionHolder getVersionHolder(ApplicationContext context) {
+		return new VersionHolder(context);
+	}
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void doSomethingAfterStartup() {
@@ -50,7 +52,7 @@ public class Config {
 		// org.bouncycastle.jce.provider.BouncyCastleProvider());
 
 		try {
-			LOGGER.warn("I am preloading data in cache, so that is ready when first call arrives");
+			LOGGER.warn("I am ensuring cache is preloaded, so that is ready when first call arrives");
 			someTypeService.initCache();
 			LOGGER.warn("did something after startup..");
 		} catch (Exception e) {
