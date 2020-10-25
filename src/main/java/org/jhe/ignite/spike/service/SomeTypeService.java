@@ -36,7 +36,7 @@ public class SomeTypeService {
 				someTypes.put(key, value);
 			}
 			cache.putAll(someTypes);
-
+			LOGGER.warn("filled cache with elements.#={}", someTypes.size());
 		} else {
 			LOGGER.warn("cache was already loaded");
 			for (Entry<String, SomeType> entry : cache) {
@@ -44,7 +44,7 @@ public class SomeTypeService {
 			}
 
 		}
-		LOGGER.warn("filled cache with elements.#={}", someTypes.size());
+		LOGGER.warn("cache contains : elements.#={}", someTypes.size());
 		return someTypes;
 	}
 
