@@ -3,5 +3,6 @@
 .project
 .settings/
 /ignite/
+/.mvn
 logs/spring.log*
 .*.sw*
